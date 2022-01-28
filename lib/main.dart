@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Utility Tracker',
-      initialRoute: 'screens/TipsScreen.dart',
+      initialRoute: 'screens/Home.dart',
       routes: {
         'screens/Home.dart': (context) => MyHomePage(),
         'screens/HomesScreen.dart': (context) => HomesScreen(),

@@ -5,10 +5,16 @@ import 'package:very_cool_app/constants.dart';
 import 'package:very_cool_app/custom-widgets/addUtilityButton.dart';
 import 'package:very_cool_app/custom-widgets/bigUtilitiesButton.dart';
 import 'package:very_cool_app/custom-widgets/optionCard.dart';
+import 'package:very_cool_app/utilities/quickchart-api.dart';
 
 class MyHomePage extends StatelessWidget {
+
+  var chartLabels = ['2016', '2017', '2018', '20450','2020'];
+
+
   @override
   Widget build(BuildContext context) {
+    print(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'));
     return Scaffold(
 
       body: SafeArea(
@@ -28,10 +34,15 @@ class MyHomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                   //hamburger icon
-                  const Icon(
-                    PhosphorIcons.list,
-                    color: lightPurple,
-                    size: 35,
+                  InkWell(
+                    onTap: (){
+                      print('---------------tapped');
+                    },
+                    child: const Icon(
+                      PhosphorIcons.list,
+                      color: lightPurple,
+                      size: 35,
+                    ),
                   ),
                   //add bill and notifications
                   Row(
@@ -41,17 +52,23 @@ class MyHomePage extends StatelessWidget {
                         color: mutedRed,
                         size: 35,
                       ),
-                      Container(
-                        child: Text('Add Bill',
-                        style: generalTextStyle(FontWeight.bold, 16.0),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
-                        margin: const EdgeInsets.only(left: 8.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          color: mutedRed,
-                          
+                      GestureDetector(
+                        onTap: (){
+                          print('----------------tapped------------');
+                          Navigator.pushNamed(context, 'screens/AddBillScreen.dart');
+                        },
+                        child: Container(
+                          child: Text('Add Bill',
+                          style: generalTextStyle(FontWeight.bold, 16.0),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+                          margin: const EdgeInsets.only(left: 8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5.0),
+                            color: mutedRed,
 
+
+                          ),
                         ),
                       )
                     ],
@@ -80,7 +97,11 @@ class MyHomePage extends StatelessWidget {
                       BigUtilityButton(buttonColor: activeGreen, emoji: 'battery', utilityName: 'Electricity',),
                       BigUtilityButton(buttonColor: darkBlue, emoji: 'water', utilityName: 'Water',),
                       BigUtilityButton(buttonColor: darkBlue, emoji: 'tv', utilityName: 'TV',),
-                      AddUtilityButton()
+                      GestureDetector(
+                          onTap: (){
+                            Navigator.pushNamed(context, 'screens/AddUtilityScreen.dart');
+                          },
+                          child: AddUtilityButton())
                     ],
                   ),
                 ),
@@ -91,8 +112,13 @@ class MyHomePage extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20.0,),
-                Image.asset('lib/assets/images/spending-trends.png',
-                width: MediaQuery.of(context).size.width * 0.97,),
+
+                 Container(color: veryDarkBlue,
+                  width: MediaQuery.of(context).size.width * 0.97,
+                  height: MediaQuery.of(context).size.width * 0.6,
+                  // child: Image.network(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'),
+                  // width: MediaQuery.of(context).size.width * 0.97,),
+                ),
                 SizedBox(height: 20.0,),
                 Row(
                   children: [
@@ -104,8 +130,16 @@ class MyHomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // OptionCard
-                    OptionCard(emoji: 'money', option: 'View past transactions',),
-                    OptionCard(emoji: 'bulb', option: 'Saving Tips',),
+                    GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, 'screens/PastTransactionsScreen.dart');
+                        },
+                        child: OptionCard(emoji: 'money', option: 'View past transactions',)),
+                    GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, 'screens/TipsScreen.dart');
+                        },
+                        child: OptionCard(emoji: 'bulb', option: 'Saving Tips',)),
                     OptionCard(emoji: 'chart', option: 'Detailed Stats',)
                   ],
                 ),

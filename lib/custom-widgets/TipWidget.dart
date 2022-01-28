@@ -10,20 +10,20 @@ class TipWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        const SizedBox(
           height: 10.0,
         ),
         Image.asset('lib/assets/images/red-dot.png'),
-        SizedBox(
+       const SizedBox(
           height: 10.0,
         ),
         Text(tip,
           style: generalTextStyle(FontWeight.normal, 16.0),
         ),
-        SizedBox(
+       const  SizedBox(
           height: 10.0,
         ),
-        Divider(
+      const   Divider(
           color: mutedRed,
         )
       ],
