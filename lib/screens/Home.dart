@@ -34,9 +34,9 @@ class MyHomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                   //hamburger icon
-                  InkWell(
+                  GestureDetector(
                     onTap: (){
-                      print('---------------tapped');
+                      Navigator.pushNamed(context, 'screens/HomesScreen.dart');
                     },
                     child: const Icon(
                       PhosphorIcons.list,
@@ -47,10 +47,15 @@ class MyHomePage extends StatelessWidget {
                   //add bill and notifications
                   Row(
                     children: [
-                      const Icon(
-                        PhosphorIcons.bell,
-                        color: mutedRed,
-                        size: 35,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.pushNamed(context, 'screens/UpcomingBillsScreen.dart');
+                        },
+                        child: const Icon(
+                          PhosphorIcons.bell,
+                          color: mutedRed,
+                          size: 35,
+                        ),
                       ),
                       GestureDetector(
                         onTap: (){
@@ -99,8 +104,10 @@ class MyHomePage extends StatelessWidget {
                       BigUtilityButton(buttonColor: darkBlue, emoji: 'tv', utilityName: 'TV',),
                       GestureDetector(
                           onTap: (){
+                            print('-------------tapped');
                             Navigator.pushNamed(context, 'screens/AddUtilityScreen.dart');
                           },
+                          behavior: HitTestBehavior.translucent,
                           child: AddUtilityButton())
                     ],
                   ),
@@ -116,8 +123,8 @@ class MyHomePage extends StatelessWidget {
                  Container(color: veryDarkBlue,
                   width: MediaQuery.of(context).size.width * 0.97,
                   height: MediaQuery.of(context).size.width * 0.6,
-                  // child: Image.network(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'),
-                  // width: MediaQuery.of(context).size.width * 0.97,),
+                  child: Image.network(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'),
+                  width: MediaQuery.of(context).size.width * 0.97,),
                 ),
                 SizedBox(height: 20.0,),
                 Row(
