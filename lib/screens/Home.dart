@@ -9,12 +9,13 @@ import 'package:very_cool_app/utilities/quickchart-api.dart';
 
 class MyHomePage extends StatelessWidget {
 
-  var chartLabels = ['2016', '2017', '2018', '20450','2020'];
+  var chartLabels = ['May', 'July', 'Aug', 'Sept','Oct'];
+  var values = ['30000', '28000', '7000', '8000', '6000'];
 
 
   @override
   Widget build(BuildContext context) {
-    print(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'));
+    print(getChartURL('line', chartLabels, 'Months', values, 'transparent'));
     return Scaffold(
 
       body: SafeArea(
@@ -123,7 +124,7 @@ class MyHomePage extends StatelessWidget {
                  Container(color: veryDarkBlue,
                   width: MediaQuery.of(context).size.width * 0.97,
                   height: MediaQuery.of(context).size.width * 0.6,
-                  child: Image.network(getChartURL('line', chartLabels, 'Months', '20000,60000,40000,30000,80000', 'transparent'),
+                  child: Image.network(getChartURL('line', chartLabels, 'Months', values, 'transparent'),
                   width: MediaQuery.of(context).size.width * 0.97,),
                 ),
                 SizedBox(height: 20.0,),

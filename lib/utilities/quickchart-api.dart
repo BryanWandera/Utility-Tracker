@@ -12,7 +12,7 @@ import 'package:http/http.dart' as http ;
 
 getChartURL (chartType, labels, labelName, data, backgroundColor){
 
-return  'https://quickchart.io/chart?bkg=transparent&c={type:%27$chartType%27,data:{labels:[${labels[0]},${labels[1]},${labels[2]},${labels[3]},${labels[4]}],datasets:[{label:%27$labelName%27,data:[120,60,50,180,120]}]}}';
+return  'https://quickchart.io/chart?bkg=transparent&c={type:%27$chartType%27,data:{labels:["${labels[0]}","${labels[1]}","${labels[2]}","${labels[3]}","${labels[4]}"],datasets:[{label:%27$labelName%27,data:[${data[0]},${data[1]},${data[2]},${data[3]},${data[4]}]}]}}';
 }
 
 
