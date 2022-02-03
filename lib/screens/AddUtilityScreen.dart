@@ -58,9 +58,9 @@ class AddUtilityScreen extends StatelessWidget {
                 SizedBox(
                   height: 10.0,
                 ),
-                CustomTextField(label: 'Name',),
-                CustomTextField(label: 'Account Name',),
-                CustomTextField(label: 'Billing Frequency',),
+                CustomTextField(label: 'Name', keyboardType: TextInputType.text,),
+                CustomTextField(label: 'Account Name', keyboardType: TextInputType.text,),
+                CustomTextField(label: 'Other info', keyboardType: TextInputType.text,),
                 BigRedButton(label: 'Done',)
               ],
             ),

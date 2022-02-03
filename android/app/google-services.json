@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "411682659483",
+    "project_id": "utility-tracker-75d8d",
+    "storage_bucket": "utility-tracker-75d8d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:411682659483:android:c99ddd08c24f46c19dba3e",
+        "android_client_info": {
+          "package_name": "com.example.very_cool_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "411682659483-qdec12nmkhci2niglr9pj0ued35r73hk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8kSLfRUJWPELEpdtXlNcjlAZ8ZD0VnGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "411682659483-qdec12nmkhci2niglr9pj0ued35r73hk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

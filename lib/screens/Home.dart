@@ -15,7 +15,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(getChartURL('line', chartLabels, 'Months', values, 'transparent'));
+    // print(getChartURL('line', chartLabels, 'Months', values, 'transparent'));
     return Scaffold(
 
       body: SafeArea(
@@ -125,6 +125,14 @@ class MyHomePage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.97,
                   height: MediaQuery.of(context).size.width * 0.6,
                   child: Image.network(getChartURL('line', chartLabels, 'Months', values, 'transparent'),
+                  errorBuilder: (BuildContext context, Object exception, StackTrace? stacktrace ){
+                    return Container(
+                      width: MediaQuery.of(context).size.width*0.97,
+                      height: MediaQuery.of(context).size.width*0.6,
+                      color: darkBlue,
+                      child: const Center(child: Text('😓')),
+                    );
+                  },
                   width: MediaQuery.of(context).size.width * 0.97,),
                 ),
                 SizedBox(height: 20.0,),
