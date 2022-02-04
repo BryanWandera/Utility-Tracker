@@ -24,9 +24,8 @@ class HomesScreen extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.width*0.03,
                 ),
-                HomeRow(homeName: 'Home Tororo', active: true,),
-                HomeRow(homeName: 'Home Muyenga',),
-                HomeRow(homeName: 'Home Nairobi',),
+                HomeRow(homeName: 'Home Muyenga', active: true,),
+
                 // add new home button
                 BigRedButton(label: 'Add New Home',)
               ],

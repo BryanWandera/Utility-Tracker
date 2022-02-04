@@ -9,12 +9,17 @@ import 'package:very_cool_app/screens/HomesScreen.dart';
 import 'package:very_cool_app/screens/TipsScreen.dart';
 import 'package:very_cool_app/screens/UpcomingBillsScreen.dart';
 import 'package:very_cool_app/screens/PastTransactionsScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:very_cool_app/utilities/firestore.dart';
 
-void main() {
+void main() async{
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     systemNavigationBarColor: veryDarkBlue, // navigation bar color
     statusBarColor: veryDarkBlue, // status bar color
   ));
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -23,9 +28,10 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Utility Tracker',
-      initialRoute: 'screens/AddUtilityScreen.dart',
+      initialRoute: 'screens/Home.dart',
       routes: {
         'screens/Home.dart': (context) => MyHomePage(),
         'screens/HomesScreen.dart': (context) => HomesScreen(),

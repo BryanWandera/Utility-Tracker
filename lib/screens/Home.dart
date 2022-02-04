@@ -6,16 +6,56 @@ import 'package:very_cool_app/custom-widgets/addUtilityButton.dart';
 import 'package:very_cool_app/custom-widgets/bigUtilitiesButton.dart';
 import 'package:very_cool_app/custom-widgets/optionCard.dart';
 import 'package:very_cool_app/utilities/quickchart-api.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MyHomePage extends StatelessWidget {
+import 'package:intl/intl.dart';
 
-  var chartLabels = ['May', 'July', 'Aug', 'Sept','Oct'];
-  var values = ['30000', '28000', '7000', '8000', '6000'];
+
+List<String> chartLabelsFinal = ['Value', 'Value', 'Value'];
+List<String> valuesFinal = ['1', '1', '1'];
+var activeUtilityID = '0ylhU9s3bjima1eyWMgn';
+var homeName = 'Home';
+
+
+class MyHomePage extends StatefulWidget {
+
+  @override
+
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
-    // print(getChartURL('line', chartLabels, 'Months', values, 'transparent'));
+    //load the home name from firebase
+    FirebaseFirestore.instance.collection('Home').where('userID', isEqualTo: 'Lcbhgc2YSzFBpxe5imIc').get().then((value){
+
+      homeName = value.docs[0]["name"];
+      print(homeName);
+      print("-----------");
+
+    });
+    // load the chart labels from firebase
+    FirebaseFirestore.instance.collection('Bill').where('utilityID', isEqualTo: activeUtilityID).get().then((value){
+      chartLabelsFinal = [];
+      valuesFinal = [];
+      for (var i = 0; i < value.docs.length; i++){
+        valuesFinal.add(value.docs[i]["amountPaid"].toString());
+        chartLabelsFinal.add(DateFormat('MMM').format(value.docs[i]["datePaid"].toDate()));
+
+      }
+      print(valuesFinal);
+      print(chartLabelsFinal);
+      print("-----------");
+      print(getChartURL('line', chartLabelsFinal, 'Months', valuesFinal, 'transparent'));
+    });
+
     return Scaffold(
 
       body: SafeArea(
@@ -91,7 +131,7 @@ class MyHomePage extends StatelessWidget {
                 Row(
 
                   children: [
-                    Text('Home Muyenga',
+                    Text(homeName,
                     style: generalTextStyle(FontWeight.w900, 28.0),),
                   ],
                 ),
@@ -124,7 +164,7 @@ class MyHomePage extends StatelessWidget {
                  Container(color: veryDarkBlue,
                   width: MediaQuery.of(context).size.width * 0.97,
                   height: MediaQuery.of(context).size.width * 0.6,
-                  child: Image.network(getChartURL('line', chartLabels, 'Months', values, 'transparent'),
+                  child: Image.network(getChartURL('line', chartLabelsFinal, 'Months', valuesFinal, 'transparent'),
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stacktrace ){
                     return Container(
                       width: MediaQuery.of(context).size.width*0.97,
