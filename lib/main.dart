@@ -11,6 +11,8 @@ import 'package:very_cool_app/screens/UpcomingBillsScreen.dart';
 import 'package:very_cool_app/screens/PastTransactionsScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:very_cool_app/utilities/firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:very_cool_app/providers/home-screen-provider.dart';
 
 void main() async{
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -29,22 +31,28 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: 'Utility Tracker',
-      initialRoute: 'screens/Home.dart',
-      routes: {
-        'screens/Home.dart': (context) => MyHomePage(),
-        'screens/HomesScreen.dart': (context) => HomesScreen(),
-        'screens/AddUtilityScreen.dart': (context)=> AddUtilityScreen(),
-        'screens/AddBillScreen.dart': (context) => AddBillScreen(),
-        'screens/UpcomingBillsScreen.dart' : (context) => UpcomingBillsScreen(),
-        'screens/PastTransactionsScreen.dart' : (context) => PastTransactionsScreen(),
-        'screens/TipsScreen.dart': (context) => TipsScreen()
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create:(_)=>HomeScreenProvider()
+        )
+      ],
+      child: MaterialApp(
+        title: 'Utility Tracker',
+        initialRoute: 'screens/Home.dart',
+        routes: {
+          'screens/Home.dart': (context) => MyHomePage(),
+          'screens/HomesScreen.dart': (context) => HomesScreen(),
+          'screens/AddUtilityScreen.dart': (context)=> AddUtilityScreen(),
+          'screens/AddBillScreen.dart': (context) => AddBillScreen(),
+          'screens/UpcomingBillsScreen.dart' : (context) => UpcomingBillsScreen(),
+          'screens/PastTransactionsScreen.dart' : (context) => PastTransactionsScreen(),
+          'screens/TipsScreen.dart': (context) => TipsScreen()
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage(),
       ),
-      home: MyHomePage(),
     );
   }
 }

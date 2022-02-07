@@ -7,14 +7,11 @@ import 'package:very_cool_app/custom-widgets/bigUtilitiesButton.dart';
 import 'package:very_cool_app/custom-widgets/optionCard.dart';
 import 'package:very_cool_app/utilities/quickchart-api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:very_cool_app/providers/home-screen-provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-
-List<String> chartLabelsFinal = ['Value', 'Value', 'Value'];
-List<String> valuesFinal = ['1', '1', '1'];
-var activeUtilityID = '0ylhU9s3bjima1eyWMgn';
-var homeName = 'Home';
+var activeUtilityID = 'Q0AqrUF1bW9aD2ajmnTR';
 
 
 class MyHomePage extends StatefulWidget {
@@ -27,34 +24,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    //load the home name from firebase
-    FirebaseFirestore.instance.collection('Home').where('userID', isEqualTo: 'Lcbhgc2YSzFBpxe5imIc').get().then((value){
 
-      homeName = value.docs[0]["name"];
-      print(homeName);
-      print("-----------");
-
-    });
-    // load the chart labels from firebase
-    FirebaseFirestore.instance.collection('Bill').where('utilityID', isEqualTo: activeUtilityID).get().then((value){
-      chartLabelsFinal = [];
-      valuesFinal = [];
-      for (var i = 0; i < value.docs.length; i++){
-        valuesFinal.add(value.docs[i]["amountPaid"].toString());
-        chartLabelsFinal.add(DateFormat('MMM').format(value.docs[i]["datePaid"].toDate()));
-
-      }
-      print(valuesFinal);
-      print(chartLabelsFinal);
-      print("-----------");
-      print(getChartURL('line', chartLabelsFinal, 'Months', valuesFinal, 'transparent'));
-    });
 
     return Scaffold(
 
@@ -131,27 +103,53 @@ class _MyHomePageState extends State<MyHomePage> {
                 Row(
 
                   children: [
-                    Text(homeName,
-                    style: generalTextStyle(FontWeight.w900, 28.0),),
+                    Consumer<HomeScreenProvider>(
+                      builder: (context, home, child){
+                        //fetch home name from firebase
+                        FirebaseFirestore.instance.collection('Home').where('userID', isEqualTo: 'Lcbhgc2YSzFBpxe5imIc').get().then((value){
+                          home.setHomeName(value.docs[0]["name"]);
+                          home.setHomeID(value.docs[0].id);
+                        });
+                        return Text(home.homeName(),
+                        style: generalTextStyle(FontWeight.w900, 28.0),);
+                      }
+
+                    ),
                   ],
                 ),
                 //utilitties row
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      BigUtilityButton(buttonColor: activeGreen, emoji: 'battery', utilityName: 'Electricity',),
-                      BigUtilityButton(buttonColor: darkBlue, emoji: 'water', utilityName: 'Water',),
-                      BigUtilityButton(buttonColor: darkBlue, emoji: 'tv', utilityName: 'TV',),
-                      GestureDetector(
-                          onTap: (){
-                            print('-------------tapped');
-                            Navigator.pushNamed(context, 'screens/AddUtilityScreen.dart');
-                          },
-                          behavior: HitTestBehavior.translucent,
-                          child: AddUtilityButton())
-                    ],
-                  ),
+                Consumer<HomeScreenProvider>(
+                  builder: (context, home, child){
+                    // load the utilities from firebase
+                    FirebaseFirestore.instance.collection('Utility').where('homeID', isEqualTo: home.homeID()).get().then((value){
+                      List<Widget> bigUtilityButtons = [];
+                      for (var i = 0; i < value.docs.length; i++){
+
+                        bigUtilityButtons.add(BigUtilityButton(buttonColor: darkBlue, emoji: 'battery', utilityName: value.docs[i]["name"],));
+                        home.setUtilityButtons(bigUtilityButtons);
+                        print(i);
+                        print('i --------------');
+
+                      }
+
+                    });
+
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Row(children: home.utilityButtons(),),
+                          GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, 'screens/AddUtilityScreen.dart');
+                              },
+                              behavior: HitTestBehavior.translucent,
+                              child: AddUtilityButton())
+                        ],
+                      ),
+                    );
+                  },
+
                 ),
                 Row(
                   children: [
@@ -164,16 +162,34 @@ class _MyHomePageState extends State<MyHomePage> {
                  Container(color: veryDarkBlue,
                   width: MediaQuery.of(context).size.width * 0.97,
                   height: MediaQuery.of(context).size.width * 0.6,
-                  child: Image.network(getChartURL('line', chartLabelsFinal, 'Months', valuesFinal, 'transparent'),
-                  errorBuilder: (BuildContext context, Object exception, StackTrace? stacktrace ){
-                    return Container(
-                      width: MediaQuery.of(context).size.width*0.97,
-                      height: MediaQuery.of(context).size.width*0.6,
-                      color: darkBlue,
-                      child: const Center(child: Text('😓')),
-                    );
-                  },
-                  width: MediaQuery.of(context).size.width * 0.97,),
+                  child: Consumer<HomeScreenProvider>(
+                    builder: (context, home, child){
+                      // load the chart labels from firebase
+                      FirebaseFirestore.instance.collection('Bill').where('utilityID', isEqualTo: activeUtilityID).get().then((value){
+                       List<String> chartLabelsFinal = [];
+                       List<String> valuesFinal = [];
+                        for (var i = 0; i < value.docs.length; i++){
+                          valuesFinal.add(value.docs[i]["amountPaid"].toString());
+                          chartLabelsFinal.add(DateFormat('MMM').format(value.docs[i]["datePaid"].toDate()));
+
+                          home.setChartLabels(chartLabelsFinal);
+                          home.setChartValues(valuesFinal);
+                        }
+                      });
+
+                      return Image.network(getChartURL('line', home.chartLabels(), 'Months', home.chartValues(), 'transparent'),
+                        errorBuilder: (BuildContext context, Object exception, StackTrace? stacktrace ){
+                          return Container(
+                            width: MediaQuery.of(context).size.width*0.97,
+                            height: MediaQuery.of(context).size.width*0.6,
+                            color: darkBlue,
+                            child: const Center(child: Text('😓')),
+                          );
+                        },
+                        width: MediaQuery.of(context).size.width * 0.97,);
+                    },
+
+                  ),
                 ),
                 SizedBox(height: 20.0,),
                 Row(
@@ -200,44 +216,60 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
                 SizedBox(height: 20.0,),
-                Row(
-                  children: [
-                    Text('Account Details',
-                      textAlign: TextAlign.left,
-                      style: generalTextStyle(FontWeight.w600, 18.0, ),),
-                  ],
-                ),
-                SizedBox(height: 10.0,),
-                Row(
-                  children: [
-                    Text('Account Name:  ',
-                    style: generalTextStyle(FontWeight.w600, 12.0),),
-                    Text('Wandera Allison',
-                      style: generalTextStyle(FontWeight.normal, 12.0),),
+                Consumer<HomeScreenProvider>(
+                  builder: (context, home, child){
+                    // load account name and number data from firebase
+                    FirebaseFirestore.instance.collection('Utility').doc(activeUtilityID).get().then((value){
+                      home.setAccountName(value["name"]);
+                      home.setAccountNumber(value["accountNo"]);
 
-                  ],
-                ),
-                SizedBox(height: 10.0,),
-                Row(
-                  children: [
-                    Text('Account Number:  ',
-                      style: generalTextStyle(FontWeight.w600, 12.0),),
-                    Text('20002076478',
-                      style: generalTextStyle(FontWeight.normal, 12.0),),
+                    });
+                    return Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text('Account Details',
+                              textAlign: TextAlign.left,
+                              style: generalTextStyle(FontWeight.w600, 18.0, ),),
+                          ],
+                        ),
+                        SizedBox(height: 10.0,),
+                        Row(
+                          children: [
+                            Text('Account Name:  ',
+                              style: generalTextStyle(FontWeight.w600, 12.0),),
+                            Text(home.accountName(),
+                              style: generalTextStyle(FontWeight.normal, 12.0),),
 
-                  ],
-                ),
-                SizedBox(height: 10.0,),
-                Row(
-                  children: [
-                    Text('Additional Info:  ',
-                      style: generalTextStyle(FontWeight.w600, 12.0),),
-                    Text('Second DSTV',
-                      style: generalTextStyle(FontWeight.normal, 12.0),),
+                          ],
+                        ),
+                        SizedBox(height: 10.0,),
+                        Row(
+                          children: [
+                            Text('Account Number:  ',
+                              style: generalTextStyle(FontWeight.w600, 12.0),),
+                            Text(home.accountNumber(),
+                              style: generalTextStyle(FontWeight.normal, 12.0),),
 
-                  ],
-                ),
-                SizedBox(height: 100.0,),
+                          ],
+                        ),
+                        SizedBox(height: 10.0,),
+                        Row(
+                          children: [
+                            Text('Additional Info:  ',
+                              style: generalTextStyle(FontWeight.w600, 12.0),),
+                            Text('None',
+                              style: generalTextStyle(FontWeight.normal, 12.0),),
+
+                          ],
+                        ),
+                        SizedBox(height: 100.0,)
+                      ],
+
+                    );
+                  },
+
+                )
 
 
 
