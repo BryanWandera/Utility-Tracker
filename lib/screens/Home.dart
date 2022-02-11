@@ -11,6 +11,7 @@ import 'package:very_cool_app/providers/home-screen-provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+List utilityObjects = [];
 
 class MyHomePage extends StatefulWidget {
 
@@ -122,11 +123,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     FirebaseFirestore.instance.collection('Utility').where('homeID', isEqualTo: home.homeID()).get().then((value){
 
                       List<BigUtilityButton> bigUtilityButtons = [];
+
                       // home.setActiveUtilityID(value.docs[0].id, null) ;
                       // bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[0]["name"], active: true, utilityID: value.docs[0].id,
                       // ));
                       for (var i = 0; i < value.docs.length; i++){
                         bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[i]["name"], utilityID: value.docs[i].id,));
+                        utilityObjects.add(value.docs[i]["name"]);
                         home.setUtilityButtons(bigUtilityButtons);
                         
                       }

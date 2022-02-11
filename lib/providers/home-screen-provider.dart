@@ -11,6 +11,8 @@ class HomeScreenProvider extends ChangeNotifier {
   var _accountName = "Account Name";
   var _accountNumber = "Account Number";
   var _activeUtilityID;
+  var _loading = false;
+
   List<BigUtilityButton> _utilityButtons = [
     BigUtilityButton(utilityName: 'Utility', emoji: 'battery', active: false,)
   ];
@@ -79,12 +81,24 @@ class HomeScreenProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
   deactivateAllUtilityButtons(){
     _utilityButtons.forEach((element) {
       element.deactivate();
 
     });
 
+    notifyListeners();
+  }
+  loading(){
+    return _loading;
+  }
+  setLoadingTrue(){
+    _loading = true;
+    notifyListeners();
+  }
+  setLoadingFalse(){
+    _loading = false;
     notifyListeners();
   }
   
