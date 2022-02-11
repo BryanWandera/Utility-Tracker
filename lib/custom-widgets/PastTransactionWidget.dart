@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:very_cool_app/constants.dart';
+import 'package:intl/intl.dart';
 
 class PastTransactionWidget extends StatelessWidget {
 
-  var emoji;
-  var bill;
   var amount;
+  var utilityName;
+  var date;
 
-  PastTransactionWidget({this.emoji= 'tv', this.bill='bill', this.amount='amount'});
+  PastTransactionWidget({this.amount='amount', this.utilityName, this.date});
 
   @override
   Widget build(BuildContext context) {
+
+    var emoji;
+    emoji = 'cloud';
+    if(utilityName.toString().toLowerCase() == 'water'){emoji = 'water';}
+    if(utilityName.toString().toLowerCase() == 'electricity'){emoji = 'battery';}
+    if(utilityName.toString().toLowerCase() == 'umeme'){emoji = 'battery';}
+    if(utilityName.toString().toLowerCase() == 'internet'){emoji = 'wifi';}
+    if(utilityName.toString().toLowerCase() == 'wifi'){emoji = 'wifi';}
+    if(utilityName.toString().toLowerCase() == 'wi-fi'){emoji = 'wifi';}
+    if(utilityName.toString().toLowerCase() == 'tv'){emoji = 'tv';}
+    if(utilityName.toString().toLowerCase() == 'internet'){emoji = 'water';}
+    if(utilityName.toString().toLowerCase() == 'television'){emoji = 'tv';}
+
     return Row(
       children: [
         Container(
@@ -32,10 +46,22 @@ class PastTransactionWidget extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(bill,
+            Text(utilityName,
               style: generalTextStyle(FontWeight.w500, 16.0),),
-            Text('UGX $amount',
-              style: generalTextStyle(FontWeight.bold, 16.0, color: mutedRed),)
+            Container(
+              width: MediaQuery.of(context).size.width*0.7,
+              child: Row(
+
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                Text('UGX $amount',
+                  style: generalTextStyle(FontWeight.bold, 16.0, color: mutedRed),),
+                  Text('${DateFormat('MMM dd, yyyy').format(date.toDate())}',
+                    style: generalTextStyle(FontWeight.normal, 12.0,),),
+                ]
+              ),
+            )
           ],
         )
       ],

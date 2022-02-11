@@ -36,7 +36,7 @@ class AddUtilityScreen extends StatelessWidget {
                 SizedBox(
                   height: 20.0,
                 ),
-                
+
                 SizedBox(
                   height: 20.0,
                 ),

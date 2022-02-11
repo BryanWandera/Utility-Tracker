@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:very_cool_app/constants.dart';
+import 'package:very_cool_app/custom-widgets/PastTransactionWidget.dart';
 import 'package:very_cool_app/custom-widgets/bigUtilitiesButton.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
@@ -14,9 +15,10 @@ class HomeScreenProvider extends ChangeNotifier {
   var _loading = false;
 
   List<BigUtilityButton> _utilityButtons = [
-    BigUtilityButton(utilityName: 'Utility', emoji: 'battery', active: false,)
+    BigUtilityButton(utilityName: 'Utility', active: false,)
   ];
 
+  List<PastTransactionWidget> _pastTransactionWidgets = [];
   
   homeName(){
     return _homeName;
@@ -99,6 +101,13 @@ class HomeScreenProvider extends ChangeNotifier {
   }
   setLoadingFalse(){
     _loading = false;
+    notifyListeners();
+  }
+  pastTransactionWidgets (){
+    return _pastTransactionWidgets;
+  }
+  setPastTransactionWidgets(value){
+    _pastTransactionWidgets = value;
     notifyListeners();
   }
   

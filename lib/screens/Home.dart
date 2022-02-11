@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:very_cool_app/constants.dart';
+import 'package:very_cool_app/custom-widgets/PastTransactionWidget.dart';
 import 'package:very_cool_app/custom-widgets/addUtilityButton.dart';
 import 'package:very_cool_app/custom-widgets/bigUtilitiesButton.dart';
 import 'package:very_cool_app/custom-widgets/optionCard.dart';
+import 'package:very_cool_app/screens/PastTransactionsScreen.dart';
 import 'package:very_cool_app/utilities/quickchart-api.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:very_cool_app/providers/home-screen-provider.dart';
@@ -128,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[0]["name"], active: true, utilityID: value.docs[0].id,
                       // ));
                       for (var i = 0; i < value.docs.length; i++){
-                        bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[i]["name"], utilityID: value.docs[i].id,));
+                        bigUtilityButtons.add(BigUtilityButton( utilityName: value.docs[i]["name"], utilityID: value.docs[i].id,));
                         utilityObjects.add(value.docs[i]["name"]);
                         home.setUtilityButtons(bigUtilityButtons);
                         
@@ -204,11 +206,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // OptionCard
-                    GestureDetector(
-                        onTap: (){
-                          Navigator.pushNamed(context, 'screens/PastTransactionsScreen.dart');
-                        },
-                        child: OptionCard(emoji: 'money', option: 'View past transactions',)),
+                    Consumer<HomeScreenProvider>(
+                      builder: (context, home, child){
+                        return GestureDetector(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>PastTransactionsScreen(homeID:home.homeID() )));
+                            },
+                            child: OptionCard(emoji: 'money', option: 'View past transactions',));
+                      },
+
+                    ),
                     GestureDetector(
                         onTap: (){
                           Navigator.pushNamed(context, 'screens/TipsScreen.dart');
