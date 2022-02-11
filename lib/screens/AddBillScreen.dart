@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 
 class AddBillScreen extends StatelessWidget  {
   var activeUtilityName;
-  var loading = false;
+
 
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 

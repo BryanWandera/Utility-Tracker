@@ -3,8 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:very_cool_app/constants.dart';
 import 'package:very_cool_app/custom-widgets/BigRedButton.dart';
 import 'package:very_cool_app/custom-widgets/TextField.dart';
+import 'package:provider/provider.dart';
+import 'package:very_cool_app/providers/home-screen-provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+
 
 class AddUtilityScreen extends StatelessWidget {
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  TextEditingController nameTextEditingController = TextEditingController();
+  TextEditingController yearlyBudgetEditingController = TextEditingController();
+  TextEditingController accountNumberEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,27 +36,7 @@ class AddUtilityScreen extends StatelessWidget {
                 SizedBox(
                   height: 20.0,
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width*0.18,
-                      height: MediaQuery.of(context).size.width*0.18,
-                      padding: EdgeInsets.all(MediaQuery.of(context).size.width*0.01),
-                      decoration: BoxDecoration(
-                          color:  darkBlue,
-                          borderRadius: BorderRadius.circular(5.0)
-                      ),
-                      child: Image.asset('lib/assets/emojis/battery.png',
-                        
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text('Electricity',
-                    style: generalTextStyle(FontWeight.normal, 16.0),)
-                  ],
-                ),
+                
                 SizedBox(
                   height: 20.0,
                 ),
@@ -55,13 +46,56 @@ class AddUtilityScreen extends StatelessWidget {
                     style: generalTextStyle(FontWeight.bold, 18.0),)
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10.0,
                 ),
-                CustomTextField(label: 'Name', keyboardType: TextInputType.text,),
-                CustomTextField(label: 'Account Name', keyboardType: TextInputType.text,),
-                CustomTextField(label: 'Other info', keyboardType: TextInputType.text,),
-                BigRedButton(label: 'Done',)
+                CustomTextField(label: 'Name', keyboardType: TextInputType.text,
+                textField: TextField(
+                  controller: nameTextEditingController,
+                  keyboardType: TextInputType.text,
+                  style: generalTextStyle(FontWeight.normal, 16.0),),
+                ),
+                CustomTextField(label: 'Account Number', keyboardType: TextInputType.text,
+                textField: TextField(
+                  controller: accountNumberEditingController,
+                  keyboardType: TextInputType.text,
+                  style: generalTextStyle(FontWeight.normal, 16.0),),
+                ),
+                CustomTextField(label: 'Yearly Budget', keyboardType: TextInputType.number,
+                textField: TextField(
+                  controller: yearlyBudgetEditingController,
+                  keyboardType: TextInputType.number,
+                  style: generalTextStyle(FontWeight.normal, 16.0),),
+                ),
+
+
+                Consumer<HomeScreenProvider>(
+                  builder: (context, home, child){
+                    if (home.loading()){
+                      return CircularProgressIndicator();
+                    } else {
+                      return
+                        BigRedButton(label: 'Done',callBack: () async {
+
+                          try {
+                            home.setLoadingTrue();
+                            _firestore.collection('Utility').add({
+                              'homeID': home.homeID(),
+                              'name': nameTextEditingController.text,
+                              'yearlyBudget': yearlyBudgetEditingController.text,
+                              'accountNo': accountNumberEditingController.text
+
+                            }).then((value){
+                              home.setLoadingFalse();
+                              Navigator.pop(context);
+                            });
+                          }catch(e){
+                            print(e);
+                          }
+                        },);
+                    }
+                  },
+                ),
               ],
             ),
           ),
