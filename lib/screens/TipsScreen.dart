@@ -4,9 +4,6 @@ import 'package:very_cool_app/custom-widgets/TipWidget.dart';
 
 class TipsScreen extends StatelessWidget {
 
-  var utility;
-
-  TipsScreen({this.utility= 'water'});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +20,7 @@ class TipsScreen extends StatelessWidget {
               Row(
                 children: [
                   Flexible(
-                    child: Text('How to cut down your $utility bill' ,
+                    child: Text('How to cut down your bills.' ,
                         style: generalTextStyle(FontWeight.bold, 28.0)
                         ,),
                   )
@@ -32,10 +29,15 @@ class TipsScreen extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              TipWidget(),
-              TipWidget(),
-              TipWidget(),
-              TipWidget(),
+              TipWidget(tip: 'Use energy saving light bulbs instead of ordinary bulbs',),
+              TipWidget(tip: 'Clean the filters in your vacuum cleaner to make it work effeciently.',),
+              TipWidget(tip: 'Replace old applicances. Older appliances are less energy effecient.',),
+              TipWidget(tip: 'Take shorter showers. It saves water.',),
+              TipWidget(tip: 'Watch videos in lower resolution to save on your internet bill.',),
+              TipWidget(tip: 'Turn off auto update on your devices to reduce your internet bill',),
+              TipWidget(tip: 'Fix faulty faucets. The little leaks add up and raise your water bill.',),
+              TipWidget(tip: 'Run full loads of laundry',),
+              TipWidget(tip: 'Utilize more modern toilets that are water effecient.',),
 
 
             ],
