@@ -48,16 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
             ),
           ),
-          // child: Container(
-          //   width: MediaQuery.of(context).size.width * 0.6,
-          //   height: MediaQuery.of(context).size.width * 0.08,
-          //   margin: EdgeInsets.symmetric(vertical: 10.0),
-          //   decoration: BoxDecoration(
-          //     color: darkBlue,
-          //
-          //
-          //   ),
-          // ),
+
         )
       ],
     );

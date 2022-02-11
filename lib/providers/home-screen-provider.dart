@@ -10,13 +10,12 @@ class HomeScreenProvider extends ChangeNotifier {
   List<String> _chartValues = ['1', '1', '1'];
   var _accountName = "Account Name";
   var _accountNumber = "Account Number";
-  List<Widget> _utilityButtons = [
-    BigUtilityButton(buttonColor: darkBlue, emoji: 'water', utilityName: 'Utility')
+  var _activeUtilityID;
+  List<BigUtilityButton> _utilityButtons = [
+    BigUtilityButton(utilityName: 'Utility', emoji: 'battery', active: false,)
   ];
 
-  var _activeUtilityID;
-
-
+  
   homeName(){
     return _homeName;
   }
@@ -67,4 +66,26 @@ class HomeScreenProvider extends ChangeNotifier {
     _utilityButtons = value;
     notifyListeners();
   }
+  activeUtilityID(){
+    return _activeUtilityID;
+  }
+  setActiveUtilityID(value, bigUtilityButton){
+    _activeUtilityID = value;
+    if(bigUtilityButton != null){
+      bigUtilityButton.activate();
+    }
+
+
+
+    notifyListeners();
+  }
+  deactivateAllUtilityButtons(){
+    _utilityButtons.forEach((element) {
+      element.deactivate();
+
+    });
+
+    notifyListeners();
+  }
+  
 }

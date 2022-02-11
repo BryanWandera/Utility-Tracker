@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:very_cool_app/constants.dart';
 import 'package:very_cool_app/custom-widgets/TextField.dart';
 import 'package:very_cool_app/custom-widgets/BigRedButton.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddBillScreen extends StatelessWidget {
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +33,11 @@ class AddBillScreen extends StatelessWidget {
                   height: 10.0,
                 ),
                 CustomTextField(label: 'Utility',),
-                CustomTextField(label: 'Amount Paid',),
-                CustomTextField(label: 'Date Paid',),
-                BigRedButton(label: 'Done',)
+                CustomTextField(label: 'Amount Paid', keyboardType: TextInputType.number,),
+                CustomTextField(label: 'Date Paid', keyboardType: TextInputType.datetime,),
+                BigRedButton(label: 'Done', callBack: (){
+                  _firestore.collection('Bill').add(data);
+                },)
               ],
             ),
           ),

@@ -11,8 +11,6 @@ import 'package:very_cool_app/providers/home-screen-provider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-var activeUtilityID = 'Q0AqrUF1bW9aD2ajmnTR';
-
 
 class MyHomePage extends StatefulWidget {
 
@@ -122,14 +120,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   builder: (context, home, child){
                     // load the utilities from firebase
                     FirebaseFirestore.instance.collection('Utility').where('homeID', isEqualTo: home.homeID()).get().then((value){
-                      List<Widget> bigUtilityButtons = [];
+
+                      List<BigUtilityButton> bigUtilityButtons = [];
+                      // home.setActiveUtilityID(value.docs[0].id, null) ;
+                      // bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[0]["name"], active: true, utilityID: value.docs[0].id,
+                      // ));
                       for (var i = 0; i < value.docs.length; i++){
-
-                        bigUtilityButtons.add(BigUtilityButton(buttonColor: darkBlue, emoji: 'battery', utilityName: value.docs[i]["name"],));
+                        bigUtilityButtons.add(BigUtilityButton( emoji: 'battery', utilityName: value.docs[i]["name"], utilityID: value.docs[i].id,));
                         home.setUtilityButtons(bigUtilityButtons);
-                        print(i);
-                        print('i --------------');
-
+                        
                       }
 
                     });
@@ -164,8 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: MediaQuery.of(context).size.width * 0.6,
                   child: Consumer<HomeScreenProvider>(
                     builder: (context, home, child){
-                      // load the chart labels from firebase
-                      FirebaseFirestore.instance.collection('Bill').where('utilityID', isEqualTo: activeUtilityID).get().then((value){
+                      // load the chart labels & values from firebase
+                      FirebaseFirestore.instance.collection('Bill').where('utilityID', isEqualTo: home.activeUtilityID()).get().then((value){
                        List<String> chartLabelsFinal = [];
                        List<String> valuesFinal = [];
                         for (var i = 0; i < value.docs.length; i++){
@@ -219,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Consumer<HomeScreenProvider>(
                   builder: (context, home, child){
                     // load account name and number data from firebase
-                    FirebaseFirestore.instance.collection('Utility').doc(activeUtilityID).get().then((value){
+                    FirebaseFirestore.instance.collection('Utility').doc(home.activeUtilityID()).get().then((value){
                       home.setAccountName(value["name"]);
                       home.setAccountNumber(value["accountNo"]);
 
