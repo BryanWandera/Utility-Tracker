@@ -1,6 +1,6 @@
 # utility tracker
 
-Chose to build a utility tracker for a class project.
+
 
 The app helps users to track water bills, electricity bills, internet, etc
 
